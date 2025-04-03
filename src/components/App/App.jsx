@@ -1,36 +1,101 @@
-import { Route, Routes } from 'react-router-dom';
 import css from './App.module.css';
-import { lazy, Suspense } from 'react';
+import { useState, useEffect } from 'react';
 
-import Navigation from '../Navigation/Navigation';
+import ContactForm from '../ContactForm/ContactForm';
+import ContactList from '../ContactList/ContactList';
+import SearchBox from '../SearchBox/SearchBox';
 
-const HomePage = lazy(() => import('../../pages/HomePage/HomePage'));
-const MoviesPage = lazy(() => import('../../pages/MoviesPage/MoviesPage'));
-const MovieDetailsPage = lazy(() =>
-  import('../../pages/MovieDetailsPage/MovieDetailsPage')
-);
-const NotFoundPage = lazy(() =>
-  import('../../pages/NotFoundPage/NotFoundPage')
-);
-
-const MovieCast = lazy(() => import('../MovieCast/MovieCast'));
-const MovieReviews = lazy(() => import('../MovieReviews/MovieReviews'));
+const initialContact = [
+  { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+  { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+  { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+  { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+];
 
 export default function App() {
+  const [contactList, setContactList] = useState(() => {
+    const savedInitialContact = localStorage.getItem('contacts');
+
+    if (savedInitialContact !== null) {
+      return JSON.parse(savedInitialContact);
+    }
+    return initialContact;
+  });
+  const [filterValue, setFilterValue] = useState('');
+
+  const addContact = newContact => {
+    setContactList(prevContact => {
+      return [...prevContact, newContact];
+    });
+  };
+
+  const deleteContact = contactId => {
+    console.log(contactId);
+    setContactList(prevContact => {
+      return prevContact.filter(contact => contact.id !== contactId);
+    });
+  };
+
+  const visibleContacts = contactList.filter(contact =>
+    contact.name.toLowerCase().includes(filterValue.toLowerCase())
+  );
+
+  useEffect(() => {
+    localStorage.setItem('contacts', JSON.stringify(contactList));
+  }, [contactList]);
+
   return (
     <div className={css.container}>
-      <Navigation />
-      <Suspense fallback={<p>Loading page...</p>}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/movies" element={<MoviesPage />} />
-          <Route path="/movies/:movieId" element={<MovieDetailsPage />}>
-            <Route path="cast" element={<MovieCast />} />
-            <Route path="reviews" element={<MovieReviews />} />
-          </Route>
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </Suspense>
+      <h1 className={css.title}>Phonebook</h1>
+      <ContactForm onAdd={addContact} />
+      <SearchBox value={filterValue} onChange={setFilterValue} />
+      <ContactList contacts={visibleContacts} onDelete={deleteContact} />
     </div>
   );
 }
+
+// ======================= hands work =======================
+
+// export default function App() {
+//   const [contactList, setContactList] = useState(() => {
+//     const savedInitialContact = localStorage.getItem('contacts');
+
+//     if (savedInitialContact !== null) {
+//       return JSON.parse(savedInitialContact);
+//     }
+//     return initialContact;
+//   });
+//   const [filterValue, setFilterValue] = useState('');
+
+//   const addContact = newContact => {
+//     setContactList(prevContact => {
+//       return [...prevContact, newContact];
+//     });
+//   };
+
+//   const deleteContact = contactId => {
+//     console.log(contactId);
+//     setContactList(prevContact => {
+//       return prevContact.filter(contact => contact.id !== contactId);
+//     });
+//   };
+
+//   const visibleContacts = contactList.filter(contact =>
+//     contact.name.toLowerCase().includes(filterValue.toLowerCase())
+//   );
+
+//   useEffect(() => {
+//     localStorage.setItem('contacts', JSON.stringify(contactList));
+//   }, [contactList]);
+
+//   return (
+//     <div className={css.container}>
+//       <h1 className={css.title}>Phonebook</h1>
+//       <ContactForm onAdd={addContact} />
+//       <SearchBox value={filterValue} onChange={setFilterValue} />
+//       <ContactList contacts={visibleContacts} onDelete={deleteContact} />
+//     </div>
+//   );
+// }
+
+// ======================= /hands work =======================
