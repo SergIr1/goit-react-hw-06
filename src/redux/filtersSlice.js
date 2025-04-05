@@ -1,20 +1,45 @@
-import { createAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-export const changeFilter = createAction('name/changeFilter');
+const slice = createSlice({
+  name: 'filters',
+  initialState: {
+    name: '',
+  },
+  reducers: {
+    changeFilter: (state, action) => {
+      state.name = action.payload;
 
-const initialState = {
-  name: '',
-};
+      // return {
+      //   ...state,
+      //   name: action.payload,
+      // };
+    },
+  },
+});
 
-export default function filtersSliceReducer(state = initialState, action) {
-  switch (action.type) {
-    case 'name/changeFilter':
-      return {
-        ...state,
-        name: action.payload,
-      };
+export default slice.reducer;
 
-    default:
-      return state;
-  }
-}
+export const { changeFilter } = slice.actions;
+
+// ============== without createSlice ==================================
+
+// export const changeFilter = createAction('name/changeFilter');
+
+// const initialState = {
+//   name: '',
+// };
+
+// export default function filtersSliceReducer(state = initialState, action) {
+//   switch (action.type) {
+//     case 'name/changeFilter':
+//       return {
+//         ...state,
+//         name: action.payload,
+//       };
+
+//     default:
+//       return state;
+//   }
+// }
+
+// ============== /without createSlice ==================================
