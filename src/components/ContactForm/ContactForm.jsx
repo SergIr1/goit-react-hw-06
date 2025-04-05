@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 
 import css from './ContactForm.module.css';
 import { useDispatch } from 'react-redux';
-import { addContact } from '../../Redux/store.js';
+import { addContact } from '../../wotr/contactsSlice.js';
 
 const UserSchema = Yup.object().shape({
   name: Yup.string()

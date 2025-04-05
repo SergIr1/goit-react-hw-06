@@ -1,7 +1,7 @@
 import { useId } from 'react';
 import css from './SearchBox.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { filterContact } from '../../Redux/store';
+import { changeFilter } from '../../wotr/filtersSlice.js';
 
 export default function SearchBox() {
   const id = useId();
@@ -9,7 +9,7 @@ export default function SearchBox() {
   const dispatch = useDispatch();
 
   const handleChange = e => {
-    dispatch(filterContact(e.target.value));
+    dispatch(changeFilter(e.target.value));
   };
 
   return (

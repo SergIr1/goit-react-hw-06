@@ -1,14 +1,14 @@
 import css from './ContactList.module.css';
 import Contact from '../Contact/Contact';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteContact } from '../../Redux/store';
+import { deleteContact } from '../../wotr/contactsSlice.js';
 
 export default function ContactList() {
   const dispatch = useDispatch();
-  const contact = useSelector(state => state.contacts.items);
+  const contacts = useSelector(state => state.contacts.items);
   const filter = useSelector(state => state.filters.name);
 
-  const filteredContacts = contact.filter(contact =>
+  const filteredContacts = contacts.filter(contact =>
     contact.name.toLowerCase().includes(filter.toLowerCase())
   );
 
