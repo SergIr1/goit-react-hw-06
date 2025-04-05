@@ -5,7 +5,7 @@
 
 // import css from './ContactForm.module.css';
 // import { useDispatch } from 'react-redux';
-// import { addContact } from '../../wrifus/contactsSlice.js';
+// import { addContact } from '../../redux/contactsSlice.js';
 
 // const UserSchema = Yup.object().shape({
 //   name: Yup.string()
